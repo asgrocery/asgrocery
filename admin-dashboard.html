@@ -1,0 +1,822 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AS Grocery - Admin Dashboard</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#faf6ef;color:#4b2e1e}
+header{background:#4b2e1e;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+header h2{font-size:22px}
+button{cursor:pointer;border:0;border-radius:6px;padding:11px 15px;font-weight:bold}
+button:disabled{opacity:.6;cursor:not-allowed}
+.logout{background:#d6a15d;color:#3d281b}
+.container{max-width:1200px;margin:30px auto;padding:0 20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px;margin-bottom:25px}
+.stat,.panel{background:white;border-radius:12px;padding:22px;box-shadow:0 3px 14px #00000010}
+.stat p{color:#927b65;margin-bottom:10px}
+.stat h2{font-size:27px;color:#805332}
+.panel{margin-bottom:25px}
+.panel h2{margin-bottom:20px}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+label{display:block;font-weight:bold;font-size:13px;margin-bottom:7px}
+input,select{width:100%;padding:12px;border:1px solid #d9c7b3;border-radius:7px;background:white}
+.form-actions{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
+.primary{background:#68432c;color:white}
+.secondary{background:#ead5b8;color:#4b2e1e}
+.danger{background:#a33a2d;color:white}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{text-align:left;padding:13px;border-bottom:1px solid #eee}
+th{background:#f4e8d8;color:#563a28}
+td button{margin:3px}
+.status{font-size:13px;color:#806b58}
+#message{margin:12px 0;overflow-wrap:anywhere}
+.image-section{grid-column:1/-1}
+.image-options{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.image-options label{margin:0}
+.upload-btn{display:inline-block;background:#ead5b8;color:#4b2e1e;padding:12px 16px;border-radius:7px;cursor:pointer;font-weight:bold}
+.camera-btn{display:inline-block;background:#68432c;color:white;padding:12px 16px;border-radius:7px;cursor:pointer;font-weight:bold}
+#imagePreview{display:none;width:150px;height:150px;object-fit:cover;border-radius:10px;border:2px solid #d9c7b3;margin-top:15px}
+#imageStatus{font-size:13px;color:#806b58;margin-top:8px}
+.product-thumb{width:45px;height:45px;object-fit:cover;border-radius:6px}
+@media(max-width:600px){
+header{padding:17px}
+.container{padding:0 12px}
+.panel{padding:15px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>🛒 AS GROCERY SHOP | ADMIN</h2>
+    <button class="logout" id="logoutBtn">Logout</button>
+</header>
+
+<div class="container">
+
+    <div class="stats">
+        <div class="stat">
+            <p>Total Products</p>
+            <h2 id="totalProducts">0</h2>
+        </div>
+
+        <div class="stat">
+            <p>Active Products</p>
+            <h2 id="activeProducts">0</h2>
+        </div>
+
+        <div class="stat">
+            <p>Low Stock (5 or less)</p>
+            <h2 id="lowStock">0</h2>
+        </div>
+    </div>
+
+    <div class="panel">
+
+        <h2 id="formTitle">Add New Product</h2>
+
+        <form id="productForm">
+
+            <input type="hidden" id="productId">
+
+            <div>
+                <label for="name">Product Name</label>
+                <input id="name" required placeholder="e.g. Tomato">
+            </div>
+
+            <div>
+                <label for="price">Price (₹)</label>
+                <input id="price" type="number" min="0" step="0.01" required placeholder="30">
+            </div>
+
+            <div>
+                <label for="category">Category</label>
+                <select id="category" required>
+                    <option value="Vegetables">Vegetables</option>
+                    <option value="Fruits">Fruits</option>
+                    <option value="Groceries">Groceries</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="stock">Stock Quantity</label>
+                <input id="stock" type="number" min="0" step="1" required placeholder="20">
+            </div>
+
+            <!-- PRODUCT IMAGE UPLOAD -->
+
+            <div class="image-section">
+
+                <label>Product Image</label>
+
+                <p class="status">
+                    Choose an image from your computer or take a photo using your camera.
+                </p>
+
+                <div class="image-options">
+
+                    <label class="upload-btn" for="imageFile">
+                        📁 Choose From Computer
+                    </label>
+
+                    <input
+                        type="file"
+                        id="imageFile"
+                        accept="image/*"
+                        hidden
+                    >
+
+                    <label class="camera-btn" for="cameraFile">
+                        📷 Take Photo
+                    </label>
+
+                    <input
+                        type="file"
+                        id="cameraFile"
+                        accept="image/*"
+                        capture="environment"
+                        hidden
+                    >
+
+                    <button type="button" class="secondary" id="clearImageBtn">
+                        Remove Selected Image
+                    </button>
+
+                </div>
+
+                <img id="imagePreview" alt="Product image preview">
+
+                <p id="imageStatus">
+                    No new image selected.
+                </p>
+
+                <div style="margin-top:15px">
+                    <label for="image">Or enter an Image URL (optional)</label>
+                    <input id="image" type="url" placeholder="https://example.com/image.jpg">
+                </div>
+
+            </div>
+
+            <div>
+                <label for="description">Description</label>
+                <input id="description" placeholder="Fresh quality product">
+            </div>
+
+            <div class="form-actions">
+
+                <button type="submit" class="primary" id="saveBtn">
+                    Add Product
+                </button>
+
+                <button type="button" class="secondary" id="cancelBtn" hidden>
+                    Cancel Edit
+                </button>
+
+            </div>
+
+        </form>
+
+        <p id="message" role="status" aria-live="polite"></p>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>Manage Products</h2>
+
+        <p class="status" id="loadStatus">Checking connection...</p>
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="productTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <p class="status">Products and images are saved in Supabase.</p>
+
+</div>
+
+<script>
+
+// ========================================
+// 1. SUPABASE CONFIGURATION
+// ========================================
+
+const SUPABASE_URL =
+"https://okkcynqpfothwpbuzzcf.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_IbeMrALRqariKvX1Z44n7g_dIqM0JuY";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const BUCKET_NAME = "product-images";
+
+let products = [];
+let selectedImageFile = null;
+let currentImageURL = "";
+
+const el = id => document.getElementById(id);
+
+
+// ========================================
+// 2. CHECK ADMIN LOGIN
+// ========================================
+
+async function checkAdmin() {
+
+    const { data, error } = await db.auth.getUser();
+
+    if (error || !data.user) {
+        window.location.replace("admin.html");
+        return false;
+    }
+
+    const { data: profile, error: profileError } = await db
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .maybeSingle();
+
+    if (profileError) {
+        el("loadStatus").textContent =
+            "Profile error: " + profileError.message;
+        return false;
+    }
+
+    if (!profile || profile.role !== "admin") {
+        await db.auth.signOut();
+        window.location.replace("admin.html");
+        return false;
+    }
+
+    return true;
+}
+
+
+// ========================================
+// 3. SHOW MESSAGE
+// ========================================
+
+function showMessage(message, isError = false) {
+
+    el("message").textContent = message;
+
+    el("message").style.color =
+        isError ? "#a33a2d" : "#277344";
+}
+
+
+// ========================================
+// 4. IMAGE FILE SELECTION
+// ========================================
+
+function handleImageSelection(file) {
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+        showMessage("Please select a valid image file.", true);
+        return;
+    }
+
+    // Maximum image size: 5 MB
+
+    if (file.size > 5 * 1024 * 1024) {
+        showMessage("Image must be smaller than 5 MB.", true);
+        return;
+    }
+
+    selectedImageFile = file;
+
+    const previewURL = URL.createObjectURL(file);
+
+    el("imagePreview").src = previewURL;
+    el("imagePreview").style.display = "block";
+
+    el("imageStatus").textContent =
+        "Selected: " + file.name;
+
+    // Clear URL field because uploaded image takes priority
+
+    el("image").value = "";
+
+    showMessage("Image selected successfully.");
+}
+
+
+el("imageFile").addEventListener("change", function() {
+
+    handleImageSelection(this.files[0]);
+
+    // Allows selecting the same file again later
+
+    this.value = "";
+
+});
+
+
+el("cameraFile").addEventListener("change", function() {
+
+    handleImageSelection(this.files[0]);
+
+    this.value = "";
+
+});
+
+
+// ========================================
+// 5. CLEAR IMAGE SELECTION
+// ========================================
+
+el("clearImageBtn").addEventListener("click", function() {
+
+    selectedImageFile = null;
+
+    el("imagePreview").removeAttribute("src");
+    el("imagePreview").style.display = "none";
+
+    el("imageStatus").textContent =
+        "No new image selected.";
+
+    el("imageFile").value = "";
+    el("cameraFile").value = "";
+
+    showMessage("Selected image cleared.");
+
+});
+
+
+// ========================================
+// 6. UPLOAD IMAGE TO SUPABASE STORAGE
+// ========================================
+
+async function uploadProductImage(file) {
+
+    const safeName = file.name
+        .toLowerCase()
+        .replace(/[^a-z0-9.-]/g, "-");
+
+    const filePath =
+        "products/" +
+        crypto.randomUUID() +
+        "-" +
+        safeName;
+
+    const { data, error } = await db.storage
+        .from(BUCKET_NAME)
+        .upload(filePath, file, {
+            cacheControl: "3600",
+            upsert: false
+        });
+
+    if (error) {
+        throw error;
+    }
+
+    const { data: publicData } = db.storage
+        .from(BUCKET_NAME)
+        .getPublicUrl(data.path);
+
+    return publicData.publicUrl;
+}
+
+
+// ========================================
+// 7. LOAD PRODUCTS
+// ========================================
+
+async function loadProducts() {
+
+    el("loadStatus").textContent = "Loading products...";
+
+    const { data, error } = await db
+        .from("products")
+        .select("*")
+        .order("id", { ascending: false });
+
+    if (error) {
+
+        el("loadStatus").textContent =
+            "Database error: " + error.message;
+
+        return;
+    }
+
+    products = data || [];
+
+    el("totalProducts").textContent = products.length;
+
+    el("activeProducts").textContent =
+        products.filter(p => p.is_active).length;
+
+    el("lowStock").textContent =
+        products.filter(p =>
+            Number(p.stock) <= 5 && p.is_active
+        ).length;
+
+    el("loadStatus").textContent =
+        products.length + " products found.";
+
+    renderProducts();
+}
+
+
+// ========================================
+// 8. DISPLAY PRODUCTS
+// ========================================
+
+function escapeHTML(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[c]));
+
+}
+
+
+function renderProducts() {
+
+    if (products.length === 0) {
+
+        el("productTable").innerHTML =
+            "<tr><td colspan='8'>No products added yet.</td></tr>";
+
+        return;
+    }
+
+    el("productTable").innerHTML = products.map(p => `
+
+        <tr>
+
+            <td>
+                ${
+                    p.image_url
+                    ? `<img class="product-thumb"
+                        src="${escapeHTML(p.image_url)}"
+                        alt="Product"
+                        onerror="this.style.display='none'">`
+                    : "No image"
+                }
+            </td>
+
+            <td>${escapeHTML(p.id)}</td>
+
+            <td>${escapeHTML(p.name)}</td>
+
+            <td>₹${Number(p.price).toFixed(2)}</td>
+
+            <td>${escapeHTML(p.category)}</td>
+
+            <td>${escapeHTML(p.stock)}</td>
+
+            <td>${p.is_active ? "Active" : "Hidden"}</td>
+
+            <td>
+
+                <button class="secondary"
+                    onclick="editProduct(${Number(p.id)})">
+                    Edit
+                </button>
+
+                <button class="danger"
+                    onclick="deleteProduct(${Number(p.id)})">
+                    Delete
+                </button>
+
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+// ========================================
+// 9. ADD OR UPDATE PRODUCT
+// ========================================
+
+el("productForm").addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const id = el("productId").value;
+
+    const product = {
+
+        name: el("name").value.trim(),
+
+        price: Number(el("price").value),
+
+        category: el("category").value,
+
+        stock: Number(el("stock").value),
+
+        image_url: el("image").value.trim() || null,
+
+        description: el("description").value.trim() || null
+
+    };
+
+    if (!product.name) {
+        showMessage("Please enter product name.", true);
+        return;
+    }
+
+    if (!Number.isFinite(product.price) || product.price < 0) {
+        showMessage("Please enter a valid price.", true);
+        return;
+    }
+
+    if (!Number.isInteger(product.stock) || product.stock < 0) {
+        showMessage("Please enter a valid stock quantity.", true);
+        return;
+    }
+
+    el("saveBtn").disabled = true;
+    el("saveBtn").textContent = "Saving...";
+
+    try {
+
+        // Upload selected image first
+
+        if (selectedImageFile) {
+
+            showMessage("Uploading product image...");
+
+            product.image_url =
+                await uploadProductImage(selectedImageFile);
+
+        }
+
+        let result;
+
+        if (id) {
+
+            result = await db
+                .from("products")
+                .update(product)
+                .eq("id", Number(id))
+                .select();
+
+        } else {
+
+            result = await db
+                .from("products")
+                .insert([product])
+                .select();
+
+        }
+
+        if (result.error) {
+            throw result.error;
+        }
+
+        if (!result.data || result.data.length === 0) {
+            throw new Error(
+                "No product was returned. Check your database permissions."
+            );
+        }
+
+        showMessage(
+            id
+                ? "Product updated successfully!"
+                : "Product added successfully!"
+        );
+
+        resetForm();
+
+        await loadProducts();
+
+    } catch (error) {
+
+        console.error("Product Save Error:", error);
+
+        showMessage(
+            "Product save failed: " + error.message,
+            true
+        );
+
+    } finally {
+
+        el("saveBtn").disabled = false;
+
+        el("saveBtn").textContent =
+            el("productId").value ? "Update Product" : "Add Product";
+
+    }
+
+});
+
+
+// ========================================
+// 10. EDIT PRODUCT
+// ========================================
+
+function editProduct(id) {
+
+    const p = products.find(
+        x => Number(x.id) === Number(id)
+    );
+
+    if (!p) return;
+
+    resetImageSelection();
+
+    el("productId").value = p.id;
+
+    el("name").value = p.name;
+
+    el("price").value = p.price;
+
+    el("category").value = p.category;
+
+    el("stock").value = p.stock;
+
+    el("image").value = p.image_url || "";
+
+    el("description").value = p.description || "";
+
+    currentImageURL = p.image_url || "";
+
+    if (currentImageURL) {
+
+        el("imagePreview").src = currentImageURL;
+
+        el("imagePreview").style.display = "block";
+
+        el("imageStatus").textContent =
+            "Current product image. Select another image to replace it.";
+
+    }
+
+    el("formTitle").textContent = "Edit Product";
+
+    el("saveBtn").textContent = "Update Product";
+
+    el("cancelBtn").hidden = false;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+// ========================================
+// 11. DELETE PRODUCT
+// ========================================
+
+async function deleteProduct(id) {
+
+    if (!confirm("Are you sure you want to delete this product?")) {
+        return;
+    }
+
+    const { error } = await db
+        .from("products")
+        .delete()
+        .eq("id", Number(id));
+
+    if (error) {
+
+        showMessage("Delete failed: " + error.message, true);
+
+        return;
+    }
+
+    showMessage("Product deleted successfully!");
+
+    await loadProducts();
+
+}
+
+
+// ========================================
+// 12. RESET IMAGE SELECTION
+// ========================================
+
+function resetImageSelection() {
+
+    selectedImageFile = null;
+
+    currentImageURL = "";
+
+    el("imagePreview").removeAttribute("src");
+
+    el("imagePreview").style.display = "none";
+
+    el("imageStatus").textContent =
+        "No new image selected.";
+
+    el("imageFile").value = "";
+
+    el("cameraFile").value = "";
+
+}
+
+
+// ========================================
+// 13. RESET FORM
+// ========================================
+
+function resetForm() {
+
+    el("productForm").reset();
+
+    el("productId").value = "";
+
+    el("formTitle").textContent = "Add New Product";
+
+    el("saveBtn").textContent = "Add Product";
+
+    el("cancelBtn").hidden = true;
+
+    resetImageSelection();
+
+}
+
+
+el("cancelBtn").addEventListener("click", resetForm);
+
+
+// ========================================
+// 14. LOGOUT
+// ========================================
+
+el("logoutBtn").addEventListener("click", async function() {
+
+    await db.auth.signOut();
+
+    window.location.replace("admin.html");
+
+});
+
+
+// ========================================
+// 15. START DASHBOARD
+// ========================================
+
+(async function() {
+
+    try {
+
+        const allowed = await checkAdmin();
+
+        if (allowed) {
+            await loadProducts();
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        el("loadStatus").textContent =
+            "Dashboard error: " + error.message;
+
+    }
+
+})();
+
+</script>
+
+</body>
+</html>

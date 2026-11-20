@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AS Grocery Shop - Products</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #faf6ef;
+    color: #4b2e1e;
+}
+
+/* HEADER */
+header {
+    background: #4b2e1e;
+    color: white;
+    padding: 15px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 50%;
+    background: white;
+}
+
+.logo h2 {
+    font-size: 22px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #f2c078;
+}
+
+.cart-btn {
+    background: #d6a15d;
+    color: #3d281b;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* HERO */
+.hero {
+    background: linear-gradient(120deg,#ead5b8,#fff9ef);
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 38px;
+    color: #4b2e1e;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    color: #806b58;
+    font-size: 17px;
+}
+
+/* SEARCH */
+.search-section {
+    text-align: center;
+    padding: 25px 15px;
+}
+
+.search-section input {
+    width: min(500px,95%);
+    padding: 14px;
+    border: 1px solid #c9ad8b;
+    border-radius: 8px;
+    outline: none;
+    font-size: 16px;
+}
+
+/* CATEGORY */
+.categories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 15px 30px;
+}
+
+.categories button {
+    padding: 11px 20px;
+    background: #ead5b8;
+    border: none;
+    border-radius: 25px;
+    color: #4b2e1e;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.categories button.active,
+.categories button:hover {
+    background: #6b4025;
+    color: white;
+}
+
+/* PRODUCTS */
+.products-section {
+    padding: 10px 6% 60px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
+    gap: 25px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px #00000012;
+    transition: 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-image {
+    height: 155px;
+    background: #f2e7d7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 75px;
+}
+
+.product-info {
+    padding: 18px;
+}
+
+.product-info h3 {
+    margin-bottom: 8px;
+    font-size: 19px;
+}
+
+.category-label {
+    font-size: 13px;
+    color: #977b5d;
+}
+
+.price {
+    font-size: 21px;
+    font-weight: bold;
+    color: #98612e;
+    margin: 13px 0;
+}
+
+.add-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #6b4025;
+    color: white;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background: #a66b32;
+}
+
+.empty-products {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 30px;
+}
+
+/* CART PANEL */
+.cart-panel {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(430px,100%);
+    height: 100%;
+    background: white;
+    z-index: 100;
+    box-shadow: -5px 0 20px #0003;
+    padding: 22px;
+    overflow-y: auto;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ead5b8;
+    padding-bottom: 17px;
+}
+
+.cart-header h2 {
+    color: #4b2e1e;
+}
+
+.close-btn {
+    background: #ead5b8;
+    border: none;
+    padding: 9px 13px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #eee;
+    padding: 16px 0;
+}
+
+.cart-item h4 {
+    margin-bottom: 7px;
+}
+
+.cart-item p {
+    color: #98612e;
+    font-weight: bold;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.quantity button {
+    width: 27px;
+    height: 27px;
+    border: none;
+    background: #ead5b8;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-btn {
+    background: #a33a2d;
+    color: white;
+    border: none;
+    padding: 7px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cart-total {
+    border-top: 2px solid #ead5b8;
+    margin-top: 20px;
+    padding-top: 18px;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkout {
+    background: #6b4025;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 7px;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.checkout:hover {
+    background: #a66b32;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 50px 10px;
+    color: #806b58;
+}
+
+/* FOOTER */
+footer {
+    background: #2e1c13;
+    color: #ead5b8;
+    padding: 25px;
+    text-align: center;
+}
+
+/* MOBILE */
+@media(max-width:600px) {
+    header {
+        justify-content: center;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero h1 {
+        font-size: 29px;
+    }
+
+    .products-section {
+        padding: 10px 4% 40px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+
+    <div class="logo">
+        <img src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
+             alt="AS Grocery Logo">
+
+        <h2>AS GROCERY SHOP</h2>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+
+        <button class="cart-btn" onclick="openCart()">
+            🛒 Cart (<span id="cartCount">0</span>)
+        </button>
+    </nav>
+
+</header>
+
+<!-- HERO -->
+<section class="hero">
+
+    <h1>Our Grocery Products 🛒</h1>
+
+    <p>Fresh Products | Best Prices | Best Quality</p>
+
+</section>
+
+<!-- SEARCH -->
+<div class="search-section">
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Search your favourite products..."
+        oninput="renderProducts()">
+
+</div>
+
+<!-- CATEGORY -->
+<div class="categories">
+
+    <button class="active" onclick="setCategory('All',this)">All Products</button>
+
+    <button onclick="setCategory('Vegetables',this)">🥦 Vegetables</button>
+
+    <button onclick="setCategory('Fruits',this)">🍎 Fruits</button>
+
+    <button onclick="setCategory('Groceries',this)">🌾 Groceries</button>
+
+    <button onclick="setCategory('Dairy',this)">🥛 Dairy</button>
+
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section">
+
+    <h2 class="section-title">Explore Our Products</h2>
+
+    <div class="product-grid" id="productGrid"></div>
+
+</section>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cartPanel">
+
+    <div class="cart-header">
+
+        <h2>🛒 Your Cart</h2>
+
+        <button class="close-btn" onclick="closeCart()">✕</button>
+
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div id="cartFooter">
+
+        <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal">₹0</span>
+        </div>
+
+        <button class="checkout" onclick="checkout()">
+            Order via WhatsApp
+        </button>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+
+    <h2>AS GROCERY SHOP</h2>
+
+    <p style="margin-top:10px">
+        Freshness & Quality You Can Trust ❤️
+    </p>
+
+    <p style="margin-top:10px">
+        © 2026 AS Grocery Shop. All Rights Reserved.
+    </p>
+
+</footer>
+
+<script>
+
+// PRODUCT LIST
+const products = [
+    {id:1,name:"Tomato",price:30,category:"Vegetables",emoji:"🍅"},
+    {id:2,name:"Potato",price:35,category:"Vegetables",emoji:"🥔"},
+    {id:3,name:"Carrot",price:40,category:"Vegetables",emoji:"🥕"},
+    {id:4,name:"Onion",price:45,category:"Vegetables",emoji:"🧅"},
+
+    {id:5,name:"Apple",price:120,category:"Fruits",emoji:"🍎"},
+    {id:6,name:"Banana",price:50,category:"Fruits",emoji:"🍌"},
+    {id:7,name:"Orange",price:80,category:"Fruits",emoji:"🍊"},
+    {id:8,name:"Grapes",price:90,category:"Fruits",emoji:"🍇"},
+
+    {id:9,name:"Rice",price:65,category:"Groceries",emoji:"🍚"},
+    {id:10,name:"Sugar",price:45,category:"Groceries",emoji:"🍬"},
+    {id:11,name:"Wheat Flour",price:50,category:"Groceries",emoji:"🌾"},
+    {id:12,name:"Cooking Oil",price:150,category:"Groceries",emoji:"🫗"},
+
+    {id:13,name:"Milk",price:30,category:"Dairy",emoji:"🥛"},
+    {id:14,name:"Butter",price:55,category:"Dairy",emoji:"🧈"}
+];
+
+// LOAD CART
+let cart = JSON.parse(localStorage.getItem("asGroceryCart") || "[]");
+let selectedCategory = "All";
+
+function saveCart() {
+    localStorage.setItem("asGroceryCart",JSON.stringify(cart));
+}
+
+// DISPLAY PRODUCTS
+function renderProducts() {
+
+    let search = document.getElementById("searchInput")
+                       .value.toLowerCase();
+
+    let filtered = products.filter(p => {
+
+        return p.name.toLowerCase().includes(search) &&
+        (selectedCategory === "All" ||
+         p.category === selectedCategory);
+
+    });
+
+    let html = "";
+
+    filtered.forEach(p => {
+
+        html += `
+        <div class="product-card">
+
+            <div class="product-image">
+                ${p.emoji}
+            </div>
+
+            <div class="product-info">
+
+                <h3>${p.name}</h3>
+
+                <span class="category-label">
+                    ${p.category}
+                </span>
+
+                <div class="price">
+                    ₹${p.price}
+                </div>
+
+                <button class="add-btn"
+                    onclick="addToCart(${p.id})">
+                    + Add to Cart
+                </button>
+
+            </div>
+        </div>
+        `;
+
+    });
+
+    document.getElementById("productGrid").innerHTML =
+        html || '<p class="empty-products">No products found.</p>';
+}
+
+// CATEGORY FILTER
+function setCategory(category,button) {
+
+    selectedCategory = category;
+
+    document.querySelectorAll(".categories button")
+        .forEach(b => b.classList.remove("active"));
+
+    button.classList.add("active");
+
+    renderProducts();
+}
+
+// ADD TO CART
+function addToCart(id) {
+
+    let product = products.find(p => p.id === id);
+
+    let item = cart.find(p => p.id === id);
+
+    if(item) {
+        item.quantity++;
+    } else {
+        cart.push({...product,quantity:1});
+    }
+
+    saveCart();
+    updateCart();
+
+}
+
+// CHANGE QUANTITY
+function changeQuantity(id,amount) {
+
+    let item = cart.find(p => p.id === id);
+
+    if(!item) return;
+
+    item.quantity += amount;
+
+    if(item.quantity <= 0) {
+        cart = cart.filter(p => p.id !== id);
+    }
+
+    saveCart();
+    updateCart();
+
+}
+
+// REMOVE ITEM
+function removeItem(id) {
+
+    cart = cart.filter(p => p.id !== id);
+
+    saveCart();
+    updateCart();
+
+}
+
+// UPDATE CART
+function updateCart() {
+
+    let count = cart.reduce((sum,p) => sum+p.quantity,0);
+
+    document.getElementById("cartCount").innerText = count;
+
+    let html = "";
+
+    if(cart.length === 0) {
+
+        html = `
+        <div class="empty-cart">
+            <h2>🛒</h2>
+            <h3>Your Cart is Empty!</h3>
+            <p>Add some products to continue shopping.</p>
+        </div>
+        `;
+
+    } else {
+
+        cart.forEach(p => {
+
+            html += `
+            <div class="cart-item">
+
+                <div>
+                    <h4>${p.emoji} ${p.name}</h4>
+
+                    <p>₹${p.price} × ${p.quantity}</p>
+
+                    <div class="quantity">
+
+                        <button onclick="changeQuantity(${p.id},-1)">−</button>
+
+                        <span>${p.quantity}</span>
+
+                        <button onclick="changeQuantity(${p.id},1)">+</button>
+
+                    </div>
+                </div>
+
+                <button class="remove-btn"
+                    onclick="removeItem(${p.id})">
+                    Remove
+                </button>
+
+            </div>
+            `;
+
+        });
+
+    }
+
+    document.getElementById("cartItems").innerHTML = html;
+
+    let total = cart.reduce(
+        (sum,p) => sum + p.price*p.quantity,0
+    );
+
+    document.getElementById("cartTotal").innerText =
+        "₹" + total.toFixed(2);
+
+    document.getElementById("cartFooter").style.display =
+        cart.length ? "block" : "none";
+
+}
+
+// OPEN CART
+function openCart() {
+
+    updateCart();
+
+    document.getElementById("cartPanel").style.display = "block";
+
+}
+
+// CLOSE CART
+function closeCart() {
+
+    document.getElementById("cartPanel").style.display = "none";
+
+}
+
+// WHATSAPP CHECKOUT
+function checkout() {
+
+    if(cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    let total = cart.reduce(
+        (sum,p) => sum + p.price*p.quantity,0
+    );
+
+    let message = "Hello AS Grocery Shop! I want to order:\n\n";
+
+    cart.forEach(p => {
+
+        message += `${p.name} - ${p.quantity} x ₹${p.price} = ₹${p.price*p.quantity}\n`;
+
+    });
+
+    message += `\nTotal Amount: ₹${total}`;
+
+    message += "\n\nPlease confirm my order.";
+
+    let url = "https://wa.me/918682880430?text=" +
+              encodeURIComponent(message);
+
+    window.open(url,"_blank");
+
+}
+
+// INITIALIZE
+renderProducts();
+updateCart();
+
+</script>
+
+</body>
+</html>

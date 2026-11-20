@@ -1,0 +1,408 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AS GROCERY SHOP | Freshness & Quality</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #faf6ef;
+    color: #3d281b;
+}
+
+/* Navigation */
+header {
+    background: #4b2e1e;
+    color: white;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.brand h2 {
+    font-size: 23px;
+    letter-spacing: 1px;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #f2c078;
+}
+
+.admin-btn {
+    background: #d6a15d;
+    color: #382316;
+    padding: 11px 20px;
+    border-radius: 7px;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 600px;
+    padding: 65px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    background: linear-gradient(120deg, #f4e8d5, #fffaf2);
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.tagline {
+    display: inline-block;
+    background: #ead5b8;
+    color: #704524;
+    padding: 9px 17px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 5vw, 60px);
+    color: #4b2e1e;
+    line-height: 1.15;
+    margin-bottom: 20px;
+}
+
+.hero h1 span {
+    color: #a66b32;
+}
+
+.hero p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #725c49;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 15px 25px;
+    border-radius: 7px;
+    font-weight: bold;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.primary {
+    background: #6b4025;
+    color: white;
+}
+
+.secondary {
+    background: #d6a15d;
+    color: #3d281b;
+}
+
+.btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px #0002;
+}
+
+.hero-logo {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+}
+
+.hero-logo img {
+    width: min(390px, 100%);
+    border-radius: 50%;
+    filter: drop-shadow(0 12px 15px #0002);
+}
+
+/* Features */
+.features {
+    padding: 65px 7%;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 34px;
+    color: #4b2e1e;
+    margin-bottom: 12px;
+}
+
+.section-subtitle {
+    color: #806b58;
+    margin-bottom: 40px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 22px;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px #55351a12;
+    border-bottom: 4px solid #c18a4d;
+    transition: 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+}
+
+.feature-card .icon {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.feature-card h3 {
+    color: #6b4025;
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    color: #806b58;
+    line-height: 1.6;
+}
+
+/* Contact */
+.contact {
+    background: #4b2e1e;
+    color: white;
+    text-align: center;
+    padding: 65px 20px;
+}
+
+.contact h2 {
+    font-size: 34px;
+    margin-bottom: 15px;
+}
+
+.contact p {
+    color: #ead5b8;
+    margin-bottom: 25px;
+    line-height: 1.7;
+}
+
+.whatsapp {
+    background: #d6a15d;
+    color: #382316;
+}
+
+/* Footer */
+footer {
+    background: #2e1c13;
+    color: #ddc5a9;
+    padding: 23px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Mobile */
+@media(max-width: 768px) {
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    nav {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .hero {
+        flex-direction: column-reverse;
+        text-align: center;
+        padding: 45px 6%;
+    }
+
+    .hero-logo img {
+        width: 240px;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero h1 {
+        font-size: 39px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navigation -->
+<header>
+    <div class="brand">
+        <img src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
+             alt="AS Grocery Logo">
+        <h2>AS GROCERY SHOP</h2>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="shop.html">Products</a>
+        <a href="#contact">Contact</a>
+        <a href="admin.html" class="admin-btn">Admin Login</a>
+    </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="tagline">
+            🥬 YOUR TRUSTED GROCERY STORE
+        </span>
+
+        <h1>
+            Welcome to<br>
+            <span>AS Grocery Shop!</span>
+        </h1>
+
+        <p>
+            Freshness, quality and great prices — all in one place.
+            Discover your everyday grocery essentials with us.
+            We bring goodness and freshness to your home!
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="shop.html" class="btn primary">
+                🛒 Explore Products →
+            </a>
+
+            <a href="https://wa.me/918682880430"
+               target="_blank"
+               rel="noopener"
+               class="btn secondary">
+                Contact Us
+            </a>
+
+        </div>
+    </div>
+
+    <div class="hero-logo">
+        <img src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
+             alt="AS Grocery Shop">
+    </div>
+
+</section>
+
+<!-- Features -->
+<section class="features">
+
+    <h2 class="section-title">Why Choose Us?</h2>
+
+    <p class="section-subtitle">
+        Bringing quality and value to your everyday shopping.
+    </p>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+            <div class="icon">🥬</div>
+            <h3>Best Products</h3>
+            <p>Fresh grocery essentials for your everyday needs.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">💰</div>
+            <h3>Best Prices</h3>
+            <p>Shop your daily essentials at affordable prices.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">⭐</div>
+            <h3>Best Quality</h3>
+            <p>Quality products and customer satisfaction matter to us.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">🛒</div>
+            <h3>Easy Shopping</h3>
+            <p>Explore our grocery products with ease.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Contact -->
+<section class="contact" id="contact">
+
+    <h2>Join AS Grocery Shop!</h2>
+
+    <p>
+        Your everyday grocery shopping starts here.<br>
+        Have questions? Contact us directly on WhatsApp.
+    </p>
+
+    <a href="https://wa.me/918682880430"
+       target="_blank"
+       rel="noopener"
+       class="btn whatsapp">
+        💬 Chat With Us on WhatsApp
+    </a>
+
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>© 2026 AS GROCERY SHOP. All Rights Reserved.</p>
+    <p style="margin-top:8px;">
+        Freshness & Quality You Can Trust ❤️
+    </p>
+</footer>
+
+</body>
+</html>

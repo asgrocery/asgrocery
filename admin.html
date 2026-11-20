@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | AS Grocery Shop</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #2b1b12, #68432c, #a8794d);
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 950px;
+      min-height: 560px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      border-radius: 22px;
+      background: #fffaf2;
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.35);
+    }
+
+    .welcome-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 45px;
+      text-align: center;
+      color: #fff8ed;
+      background: linear-gradient(150deg, #3c2619, #805332);
+    }
+
+    .welcome-panel img {
+      width: 155px;
+      height: 155px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: #fffaf2;
+      padding: 8px;
+      margin-bottom: 28px;
+    }
+
+    .welcome-panel h1 {
+      font-size: 30px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .welcome-panel p {
+      max-width: 320px;
+      line-height: 1.7;
+      color: #f1dfca;
+      font-size: 15px;
+    }
+
+    .welcome-tag {
+      margin-top: 30px;
+      padding: 10px 18px;
+      border: 1px solid #d7b16d;
+      border-radius: 30px;
+      color: #f4d79e;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+    }
+
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 55px 45px;
+    }
+
+    .form-panel h2 {
+      color: #432b1d;
+      font-size: 29px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #927e6d;
+      margin-bottom: 35px;
+      font-size: 14px;
+    }
+
+    .input-group {
+      margin-bottom: 22px;
+    }
+
+    .input-group label {
+      display: block;
+      color: #563a28;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 9px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 15px;
+      border: 1px solid #e1d3c2;
+      border-radius: 9px;
+      outline: none;
+      background: #fff;
+      color: #432b1d;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .input-group input:focus {
+      border-color: #a8794d;
+      box-shadow: 0 0 0 3px rgba(168, 121, 77, 0.12);
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper input {
+      padding-right: 65px;
+    }
+
+    .show-password {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: none;
+      color: #805332;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 15px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 9px;
+      background: #68432c;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-btn:hover {
+      background: #432b1d;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(67, 43, 29, 0.2);
+    }
+
+    .error-message {
+      display: none;
+      color: #b52b2b;
+      background: #fff0ed;
+      padding: 11px;
+      border-radius: 7px;
+      font-size: 13px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .security-note {
+      margin-top: 28px;
+      text-align: center;
+      color: #9b8978;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+      color: #805332;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      .login-container {
+        max-width: 430px;
+        grid-template-columns: 1fr;
+      }
+
+      .welcome-panel {
+        padding: 30px 20px;
+      }
+
+      .welcome-panel img {
+        width: 105px;
+        height: 105px;
+        margin-bottom: 18px;
+      }
+
+      .welcome-panel h1 {
+        font-size: 23px;
+      }
+
+      .welcome-panel p {
+        font-size: 13px;
+      }
+
+      .welcome-tag {
+        margin-top: 18px;
+      }
+
+      .form-panel {
+        padding: 35px 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-container">
+
+    <div class="welcome-panel">
+      <img
+        src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
+        alt="AS Grocery Shop Logo"
+      >
+
+      <h1>AS GROCERY SHOP</h1>
+
+      <p>
+        Welcome to your store management portal.
+        Manage products, monitor orders and keep your grocery
+        business running smoothly.
+      </p>
+
+      <div class="welcome-tag">ADMINISTRATION PORTAL</div>
+    </div>
+
+    <div class="form-panel">
+      <h2>Admin Login</h2>
+      <p class="subtitle">Sign in to access your dashboard</p>
+
+      <form id="loginForm">
+
+        <div class="input-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter admin email"
+            required
+          >
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            >
+
+            <button
+              type="button"
+              class="show-password"
+              id="togglePassword"
+            >
+              SHOW
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="login-btn">
+          Sign In to Dashboard →
+        </button>
+
+        <div class="error-message" id="errorMessage">
+          Invalid email or password. Please try again.
+        </div>
+
+      </form>
+
+      <p class="security-note">
+        🔒 Authorized personnel only.<br>
+        Please keep your login details private.
+      </p>
+
+      <a href="index.html" class="back-link">
+        ← Back to Store Homepage
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    // Show or hide password
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    togglePassword.addEventListener("click", function () {
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePassword.textContent = "HIDE";
+      } else {
+        passwordInput.type = "password";
+        togglePassword.textContent = "SHOW";
+      }
+    });
+
+    // Demo login
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = passwordInput.value;
+      const errorMessage = document.getElementById("errorMessage");
+
+      if (
+        email === "admin@asgrocery.com" &&
+        password === "Admin@123"
+      ) {
+        errorMessage.style.display = "none";
+        <a href="dashboard.html"></a>
+      } else {
+        errorMessage.style.display = "block";
+      }
+    });
+  </script>
+
+</body>
+</html>

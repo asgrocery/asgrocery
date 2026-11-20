@@ -4,23 +4,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>AS Grocery Shop - Products</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
     background: #faf6ef;
     color: #4b2e1e;
 }
 
-/* HEADER */
 header {
     background: #4b2e1e;
     color: white;
@@ -32,28 +32,14 @@ header {
     gap: 15px;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.logo img {
-    width: 65px;
-    height: 65px;
-    object-fit: cover;
-    border-radius: 50%;
-    background: white;
-}
-
 .logo h2 {
     font-size: 22px;
 }
 
 nav {
     display: flex;
-    align-items: center;
     gap: 15px;
+    align-items: center;
 }
 
 nav a {
@@ -62,54 +48,44 @@ nav a {
     font-weight: bold;
 }
 
-nav a:hover {
-    color: #f2c078;
-}
-
 .cart-btn {
     background: #d6a15d;
     color: #3d281b;
-    border: none;
+    border: 0;
     padding: 12px 18px;
     border-radius: 7px;
     cursor: pointer;
     font-weight: bold;
 }
 
-/* HERO */
 .hero {
-    background: linear-gradient(120deg,#ead5b8,#fff9ef);
+    background: linear-gradient(120deg, #ead5b8, #fff9ef);
     padding: 40px 20px;
     text-align: center;
 }
 
 .hero h1 {
-    font-size: 38px;
-    color: #4b2e1e;
+    font-size: 36px;
     margin-bottom: 12px;
 }
 
 .hero p {
     color: #806b58;
-    font-size: 17px;
 }
 
-/* SEARCH */
-.search-section {
+.search {
     text-align: center;
     padding: 25px 15px;
 }
 
-.search-section input {
-    width: min(500px,95%);
+.search input {
+    width: min(500px, 95%);
     padding: 14px;
     border: 1px solid #c9ad8b;
     border-radius: 8px;
-    outline: none;
     font-size: 16px;
 }
 
-/* CATEGORY */
 .categories {
     display: flex;
     justify-content: center;
@@ -121,7 +97,7 @@ nav a:hover {
 .categories button {
     padding: 11px 20px;
     background: #ead5b8;
-    border: none;
+    border: 0;
     border-radius: 25px;
     color: #4b2e1e;
     cursor: pointer;
@@ -134,7 +110,6 @@ nav a:hover {
     color: white;
 }
 
-/* PRODUCTS */
 .products-section {
     padding: 10px 6% 60px;
 }
@@ -147,7 +122,7 @@ nav a:hover {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     gap: 25px;
 }
 
@@ -156,20 +131,27 @@ nav a:hover {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 15px #00000012;
-    transition: 0.3s;
+    transition: transform 0.2s;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
 }
 
 .product-image {
-    height: 155px;
+    height: 175px;
     background: #f2e7d7;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 75px;
+    font-size: 70px;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .product-info {
@@ -178,12 +160,17 @@ nav a:hover {
 
 .product-info h3 {
     margin-bottom: 8px;
-    font-size: 19px;
 }
 
 .category-label {
     font-size: 13px;
     color: #977b5d;
+}
+
+.description {
+    color: #806b58;
+    font-size: 13px;
+    margin-top: 8px;
 }
 
 .price {
@@ -193,10 +180,16 @@ nav a:hover {
     margin: 13px 0;
 }
 
+.stock-label {
+    font-size: 13px;
+    color: #806b58;
+    margin-bottom: 10px;
+}
+
 .add-btn {
     width: 100%;
     padding: 12px;
-    border: none;
+    border: 0;
     background: #6b4025;
     color: white;
     border-radius: 7px;
@@ -205,22 +198,27 @@ nav a:hover {
 }
 
 .add-btn:hover {
-    background: #a66b32;
+    background: #4b2e1e;
+}
+
+.add-btn:disabled {
+    background: #aaa;
+    cursor: not-allowed;
 }
 
 .empty-products {
-    grid-column: 1/-1;
     text-align: center;
     padding: 30px;
+    grid-column: 1 / -1;
+    color: #806b58;
 }
 
-/* CART PANEL */
 .cart-panel {
     display: none;
     position: fixed;
     top: 0;
     right: 0;
-    width: min(430px,100%);
+    width: min(430px, 100%);
     height: 100%;
     background: white;
     z-index: 100;
@@ -232,18 +230,13 @@ nav a:hover {
 .cart-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     border-bottom: 2px solid #ead5b8;
     padding-bottom: 17px;
 }
 
-.cart-header h2 {
-    color: #4b2e1e;
-}
-
 .close-btn {
     background: #ead5b8;
-    border: none;
+    border: 0;
     padding: 9px 13px;
     border-radius: 5px;
     cursor: pointer;
@@ -258,13 +251,10 @@ nav a:hover {
     padding: 16px 0;
 }
 
-.cart-item h4 {
-    margin-bottom: 7px;
-}
-
 .cart-item p {
     color: #98612e;
     font-weight: bold;
+    margin-top: 7px;
 }
 
 .quantity {
@@ -277,7 +267,7 @@ nav a:hover {
 .quantity button {
     width: 27px;
     height: 27px;
-    border: none;
+    border: 0;
     background: #ead5b8;
     border-radius: 4px;
     cursor: pointer;
@@ -286,7 +276,7 @@ nav a:hover {
 .remove-btn {
     background: #a33a2d;
     color: white;
-    border: none;
+    border: 0;
     padding: 7px;
     border-radius: 5px;
     cursor: pointer;
@@ -307,16 +297,12 @@ nav a:hover {
     color: white;
     width: 100%;
     padding: 15px;
-    border: none;
+    border: 0;
     border-radius: 7px;
     margin-top: 20px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-}
-
-.checkout:hover {
-    background: #a66b32;
 }
 
 .empty-cart {
@@ -325,7 +311,6 @@ nav a:hover {
     color: #806b58;
 }
 
-/* FOOTER */
 footer {
     background: #2e1c13;
     color: #ead5b8;
@@ -333,7 +318,6 @@ footer {
     text-align: center;
 }
 
-/* MOBILE */
 @media(max-width:600px) {
     header {
         justify-content: center;
@@ -358,13 +342,10 @@ footer {
 <body>
 
 <!-- HEADER -->
+
 <header>
-
     <div class="logo">
-        <img src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
-             alt="AS Grocery Logo">
-
-        <h2>AS GROCERY SHOP</h2>
+        <h2>🛒 AS GROCERY SHOP</h2>
     </div>
 
     <nav>
@@ -374,62 +355,75 @@ footer {
             🛒 Cart (<span id="cartCount">0</span>)
         </button>
     </nav>
-
 </header>
 
-<!-- HERO -->
+<!-- HERO SECTION -->
+
 <section class="hero">
-
     <h1>Our Grocery Products 🛒</h1>
-
     <p>Fresh Products | Best Prices | Best Quality</p>
-
 </section>
 
 <!-- SEARCH -->
-<div class="search-section">
 
+<div class="search">
     <input
-        type="text"
         id="searchInput"
         placeholder="🔍 Search your favourite products..."
-        oninput="renderProducts()">
-
+        oninput="renderProducts()"
+    >
 </div>
 
-<!-- CATEGORY -->
+<!-- CATEGORIES -->
+
 <div class="categories">
+    <button class="active" onclick="setCategory('All',this)">
+        All Products
+    </button>
 
-    <button class="active" onclick="setCategory('All',this)">All Products</button>
+    <button onclick="setCategory('Vegetables',this)">
+        🥦 Vegetables
+    </button>
 
-    <button onclick="setCategory('Vegetables',this)">🥦 Vegetables</button>
+    <button onclick="setCategory('Fruits',this)">
+        🍎 Fruits
+    </button>
 
-    <button onclick="setCategory('Fruits',this)">🍎 Fruits</button>
+    <button onclick="setCategory('Groceries',this)">
+        🌾 Groceries
+    </button>
 
-    <button onclick="setCategory('Groceries',this)">🌾 Groceries</button>
+    <button onclick="setCategory('Dairy',this)">
+        🥛 Dairy
+    </button>
 
-    <button onclick="setCategory('Dairy',this)">🥛 Dairy</button>
-
+    <button onclick="setCategory('Other',this)">
+        🛒 Other
+    </button>
 </div>
 
 <!-- PRODUCTS -->
+
 <section class="products-section">
 
     <h2 class="section-title">Explore Our Products</h2>
 
-    <div class="product-grid" id="productGrid"></div>
+    <div class="product-grid" id="productGrid">
+        <p class="empty-products">Loading products...</p>
+    </div>
 
 </section>
 
-<!-- CART PANEL -->
+<!-- CART -->
+
 <div class="cart-panel" id="cartPanel">
 
     <div class="cart-header">
-
         <h2>🛒 Your Cart</h2>
 
-        <button class="close-btn" onclick="closeCart()">✕</button>
-
+        <button class="close-btn" onclick="closeCart()">
+            ✕
+        </button>
     </div>
 
     <div id="cartItems"></div>
@@ -450,8 +444,8 @@ footer {
 </div>
 
 <!-- FOOTER -->
-<footer>
 
+<footer>
     <h2>AS GROCERY SHOP</h2>
 
     <p style="margin-top:10px">
@@ -461,168 +455,396 @@ footer {
     <p style="margin-top:10px">
         © 2026 AS Grocery Shop. All Rights Reserved.
     </p>
-
 </footer>
 
 <script>
 
-// PRODUCT LIST
-const products = [
-    {id:1,name:"Tomato",price:30,category:"Vegetables",emoji:"🍅"},
-    {id:2,name:"Potato",price:35,category:"Vegetables",emoji:"🥔"},
-    {id:3,name:"Carrot",price:40,category:"Vegetables",emoji:"🥕"},
-    {id:4,name:"Onion",price:45,category:"Vegetables",emoji:"🧅"},
+// ========================================
+// SUPABASE CONFIGURATION
+// ========================================
 
-    {id:5,name:"Apple",price:120,category:"Fruits",emoji:"🍎"},
-    {id:6,name:"Banana",price:50,category:"Fruits",emoji:"🍌"},
-    {id:7,name:"Orange",price:80,category:"Fruits",emoji:"🍊"},
-    {id:8,name:"Grapes",price:90,category:"Fruits",emoji:"🍇"},
+const SUPABASE_URL =
+    "https://okkcynqpfothwpbuzzcf.supabase.co";
 
-    {id:9,name:"Rice",price:65,category:"Groceries",emoji:"🍚"},
-    {id:10,name:"Sugar",price:45,category:"Groceries",emoji:"🍬"},
-    {id:11,name:"Wheat Flour",price:50,category:"Groceries",emoji:"🌾"},
-    {id:12,name:"Cooking Oil",price:150,category:"Groceries",emoji:"🫗"},
+const SUPABASE_KEY =
+    "sb_publishable_IbeMrALRqariKvX1Z44n7g_dIqM0JuY";
 
-    {id:13,name:"Milk",price:30,category:"Dairy",emoji:"🥛"},
-    {id:14,name:"Butter",price:55,category:"Dairy",emoji:"🧈"}
-];
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
-// LOAD CART
-let cart = JSON.parse(localStorage.getItem("asGroceryCart") || "[]");
+
+// ========================================
+// GLOBAL VARIABLES
+// ========================================
+
+let products = [];
+
+let cart = JSON.parse(
+    localStorage.getItem("asGroceryCart") || "[]"
+);
+
 let selectedCategory = "All";
 
-function saveCart() {
-    localStorage.setItem("asGroceryCart",JSON.stringify(cart));
+
+// ========================================
+// HTML SECURITY
+// ========================================
+
+function escapeHTML(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[c]));
+
 }
 
+
+// ========================================
+// CATEGORY EMOJI
+// ========================================
+
+function emojiFor(category) {
+
+    return {
+        Vegetables: "🥦",
+        Fruits: "🍎",
+        Groceries: "🌾",
+        Dairy: "🥛",
+        Other: "🛒"
+    }[category] || "🛒";
+
+}
+
+
+// ========================================
+// LOAD PRODUCTS FROM SUPABASE
+// ========================================
+
+async function loadProducts() {
+
+    const grid = document.getElementById("productGrid");
+
+    grid.innerHTML =
+        "<p class='empty-products'>Loading products...</p>";
+
+    try {
+
+        const { data, error } = await db
+            .from("products")
+            .select("id,name,description,price,category,stock,image_url,is_active")
+            .eq("is_active", true)
+            .order("id", { ascending: true });
+
+        if (error) {
+            throw error;
+        }
+
+        products = data || [];
+
+        // Remove products from cart if they are no longer active
+
+        cart = cart.filter(item =>
+            products.some(p => Number(p.id) === Number(item.id))
+        );
+
+        saveCart();
+
+        renderProducts();
+
+        updateCart();
+
+        if (products.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-products">
+                    <h3>No products available yet.</h3>
+                    <p>Please check again later.</p>
+                </div>
+            `;
+        }
+
+    } catch (error) {
+
+        console.error("Supabase Product Error:", error);
+
+        grid.innerHTML = `
+            <div class="empty-products">
+                <h3>Unable to load products.</h3>
+                <p>${escapeHTML(error.message)}</p>
+                <button class="add-btn"
+                    style="max-width:180px;margin-top:15px"
+                    onclick="loadProducts()">
+                    Try Again
+                </button>
+            </div>
+        `;
+
+    }
+
+}
+
+
+// ========================================
 // DISPLAY PRODUCTS
+// ========================================
+
 function renderProducts() {
 
-    let search = document.getElementById("searchInput")
-                       .value.toLowerCase();
+    const search = document
+        .getElementById("searchInput")
+        .value.toLowerCase()
+        .trim();
 
-    let filtered = products.filter(p => {
+    const filtered = products.filter(p =>
 
-        return p.name.toLowerCase().includes(search) &&
-        (selectedCategory === "All" ||
-         p.category === selectedCategory);
+        String(p.name).toLowerCase().includes(search) &&
 
-    });
+        (
+            selectedCategory === "All" ||
+            p.category === selectedCategory
+        )
+
+    );
 
     let html = "";
 
     filtered.forEach(p => {
 
+        const image = p.image_url
+            ? `
+                <img
+                    src="${escapeHTML(p.image_url)}"
+                    alt="${escapeHTML(p.name)}"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='block'"
+                >
+            `
+            : "";
+
         html += `
-        <div class="product-card">
 
-            <div class="product-image">
-                ${p.emoji}
-            </div>
+            <div class="product-card">
 
-            <div class="product-info">
+                <div class="product-image">
 
-                <h3>${p.name}</h3>
+                    ${image}
 
-                <span class="category-label">
-                    ${p.category}
-                </span>
+                    <span style="${p.image_url ? 'display:none' : ''}">
+                        ${emojiFor(p.category)}
+                    </span>
 
-                <div class="price">
-                    ₹${p.price}
                 </div>
 
-                <button class="add-btn"
-                    onclick="addToCart(${p.id})">
-                    + Add to Cart
-                </button>
+                <div class="product-info">
+
+                    <h3>${escapeHTML(p.name)}</h3>
+
+                    <span class="category-label">
+                        ${escapeHTML(p.category)}
+                    </span>
+
+                    ${p.description ? `
+                        <p class="description">
+                            ${escapeHTML(p.description)}
+                        </p>
+                    ` : ""}
+
+                    <div class="price">
+                        ₹${Number(p.price).toFixed(2)}
+                    </div>
+
+                    <div class="stock-label">
+                        ${p.stock > 0
+                            ? `Available: ${p.stock}`
+                            : "Out of stock"}
+                    </div>
+
+                    <button
+                        class="add-btn"
+                        ${p.stock <= 0 ? "disabled" : ""}
+                        onclick="addToCart(${Number(p.id)})"
+                    >
+                        ${p.stock > 0
+                            ? "+ Add to Cart"
+                            : "Out of Stock"}
+                    </button>
+
+                </div>
 
             </div>
-        </div>
+
         `;
 
     });
 
     document.getElementById("productGrid").innerHTML =
-        html || '<p class="empty-products">No products found.</p>';
+        html || "<p class='empty-products'>No products found.</p>";
+
 }
 
+
+// ========================================
 // CATEGORY FILTER
-function setCategory(category,button) {
+// ========================================
+
+function setCategory(category, button) {
 
     selectedCategory = category;
 
-    document.querySelectorAll(".categories button")
+    document
+        .querySelectorAll(".categories button")
         .forEach(b => b.classList.remove("active"));
 
     button.classList.add("active");
 
     renderProducts();
+
 }
 
+
+// ========================================
+// SAVE CART
+// ========================================
+
+function saveCart() {
+
+    localStorage.setItem(
+        "asGroceryCart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+// ========================================
 // ADD TO CART
+// ========================================
+
 function addToCart(id) {
 
-    let product = products.find(p => p.id === id);
+    const product = products.find(
+        p => Number(p.id) === Number(id)
+    );
 
-    let item = cart.find(p => p.id === id);
+    if (!product) return;
 
-    if(item) {
+    const item = cart.find(
+        p => Number(p.id) === Number(id)
+    );
+
+    const quantity = item ? item.quantity : 0;
+
+    if (quantity >= product.stock) {
+
+        alert("Sorry, available stock is only " + product.stock);
+
+        return;
+
+    }
+
+    if (item) {
+
         item.quantity++;
+
     } else {
-        cart.push({...product,quantity:1});
+
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: Number(product.price),
+            quantity: 1
+        });
+
     }
 
     saveCart();
+
     updateCart();
 
 }
 
+
+// ========================================
 // CHANGE QUANTITY
-function changeQuantity(id,amount) {
+// ========================================
 
-    let item = cart.find(p => p.id === id);
+function changeQuantity(id, amount) {
 
-    if(!item) return;
+    const item = cart.find(
+        p => Number(p.id) === Number(id)
+    );
+
+    const product = products.find(
+        p => Number(p.id) === Number(id)
+    );
+
+    if (!item || !product) return;
+
+    if (amount > 0 && item.quantity >= product.stock) {
+
+        alert("Maximum available stock reached.");
+
+        return;
+
+    }
 
     item.quantity += amount;
 
-    if(item.quantity <= 0) {
-        cart = cart.filter(p => p.id !== id);
+    if (item.quantity <= 0) {
+
+        cart = cart.filter(
+            p => Number(p.id) !== Number(id)
+        );
+
     }
 
     saveCart();
+
     updateCart();
 
 }
 
-// REMOVE ITEM
+
+// ========================================
+// REMOVE CART ITEM
+// ========================================
+
 function removeItem(id) {
 
-    cart = cart.filter(p => p.id !== id);
+    cart = cart.filter(
+        p => Number(p.id) !== Number(id)
+    );
 
     saveCart();
+
     updateCart();
 
 }
 
-// UPDATE CART
+
+// ========================================
+// UPDATE CART DISPLAY
+// ========================================
+
 function updateCart() {
 
-    let count = cart.reduce((sum,p) => sum+p.quantity,0);
-
-    document.getElementById("cartCount").innerText = count;
+    document.getElementById("cartCount").textContent =
+        cart.reduce((sum, p) => sum + p.quantity, 0);
 
     let html = "";
 
-    if(cart.length === 0) {
+    if (cart.length === 0) {
 
         html = `
-        <div class="empty-cart">
-            <h2>🛒</h2>
-            <h3>Your Cart is Empty!</h3>
-            <p>Add some products to continue shopping.</p>
-        </div>
+            <div class="empty-cart">
+                <h2>🛒</h2>
+                <h3>Your Cart is Empty!</h3>
+                <p>Add some products to continue shopping.</p>
+            </div>
         `;
 
     } else {
@@ -630,30 +852,42 @@ function updateCart() {
         cart.forEach(p => {
 
             html += `
-            <div class="cart-item">
 
-                <div>
-                    <h4>${p.emoji} ${p.name}</h4>
+                <div class="cart-item">
 
-                    <p>₹${p.price} × ${p.quantity}</p>
+                    <div>
 
-                    <div class="quantity">
+                        <h4>${escapeHTML(p.name)}</h4>
 
-                        <button onclick="changeQuantity(${p.id},-1)">−</button>
+                        <p>
+                            ₹${Number(p.price).toFixed(2)} × ${p.quantity}
+                        </p>
 
-                        <span>${p.quantity}</span>
+                        <div class="quantity">
 
-                        <button onclick="changeQuantity(${p.id},1)">+</button>
+                            <button onclick="changeQuantity(${Number(p.id)},-1)">
+                                −
+                            </button>
+
+                            <span>${p.quantity}</span>
+
+                            <button onclick="changeQuantity(${Number(p.id)},1)">
+                                +
+                            </button>
+
+                        </div>
 
                     </div>
+
+                    <button
+                        class="remove-btn"
+                        onclick="removeItem(${Number(p.id)})"
+                    >
+                        Remove
+                    </button>
+
                 </div>
 
-                <button class="remove-btn"
-                    onclick="removeItem(${p.id})">
-                    Remove
-                </button>
-
-            </div>
             `;
 
         });
@@ -662,11 +896,12 @@ function updateCart() {
 
     document.getElementById("cartItems").innerHTML = html;
 
-    let total = cart.reduce(
-        (sum,p) => sum + p.price*p.quantity,0
+    const total = cart.reduce(
+        (sum, p) => sum + p.price * p.quantity,
+        0
     );
 
-    document.getElementById("cartTotal").innerText =
+    document.getElementById("cartTotal").textContent =
         "₹" + total.toFixed(2);
 
     document.getElementById("cartFooter").style.display =
@@ -674,56 +909,131 @@ function updateCart() {
 
 }
 
+
+// ========================================
 // OPEN CART
+// ========================================
+
 function openCart() {
 
     updateCart();
 
-    document.getElementById("cartPanel").style.display = "block";
+    document.getElementById("cartPanel").style.display =
+        "block";
 
 }
 
+
+// ========================================
 // CLOSE CART
+// ========================================
+
 function closeCart() {
 
-    document.getElementById("cartPanel").style.display = "none";
+    document.getElementById("cartPanel").style.display =
+        "none";
 
 }
 
-// WHATSAPP CHECKOUT
-function checkout() {
 
-    if(cart.length === 0) {
+// ========================================
+// WHATSAPP CHECKOUT
+// ========================================
+
+async function checkout() {
+
+    if (cart.length === 0) {
+
         alert("Your cart is empty!");
+
         return;
+
     }
 
-    let total = cart.reduce(
-        (sum,p) => sum + p.price*p.quantity,0
+    // Verify current prices and stock
+
+    const { data, error } = await db
+        .from("products")
+        .select("id,name,price,stock,is_active")
+        .in("id", cart.map(p => p.id));
+
+    if (error) {
+
+        alert("Unable to verify product stock. Please try again.");
+
+        console.error(error);
+
+        return;
+
+    }
+
+    for (const item of cart) {
+
+        const latest = data.find(
+            p => Number(p.id) === Number(item.id)
+        );
+
+        if (
+            !latest ||
+            !latest.is_active ||
+            latest.stock < item.quantity
+        ) {
+
+            alert(
+                "Stock changed for " +
+                item.name +
+                ". Please update your cart."
+            );
+
+            await loadProducts();
+
+            return;
+
+        }
+
+        item.name = latest.name;
+        item.price = Number(latest.price);
+
+    }
+
+    saveCart();
+
+    updateCart();
+
+    const total = cart.reduce(
+        (sum, p) => sum + p.price * p.quantity,
+        0
     );
 
-    let message = "Hello AS Grocery Shop! I want to order:\n\n";
+    let message =
+        "Hello AS Grocery Shop! I want to order:\n\n";
 
     cart.forEach(p => {
 
-        message += `${p.name} - ${p.quantity} x ₹${p.price} = ₹${p.price*p.quantity}\n`;
+        message +=
+            `${p.name} - ${p.quantity} x ₹${p.price} = ₹${p.price * p.quantity}\n`;
 
     });
 
-    message += `\nTotal Amount: ₹${total}`;
+    message +=
+        `\nTotal Amount: ₹${total.toFixed(2)}\n\nPlease confirm my order.`;
 
-    message += "\n\nPlease confirm my order.";
+    const whatsappURL =
+        "https://wa.me/918682880430?text=" +
+        encodeURIComponent(message);
 
-    let url = "https://wa.me/918682880430?text=" +
-              encodeURIComponent(message);
-
-    window.open(url,"_blank");
+    window.open(whatsappURL, "_blank");
 
 }
 
-// INITIALIZE
-renderProducts();
+
+// ========================================
+// START SHOP PAGE
+// ========================================
+
 updateCart();
+
+loadProducts();
 
 </script>
 

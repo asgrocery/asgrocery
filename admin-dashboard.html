@@ -4,101 +4,565 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AS Grocery - Admin Dashboard</title>
+<title>AS Grocery | Admin Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#faf6ef;color:#4b2e1e}
-header{background:#4b2e1e;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
-header h2{font-size:22px}
-button{cursor:pointer;border:0;border-radius:6px;padding:11px 15px;font-weight:bold}
-button:disabled{opacity:.6;cursor:not-allowed}
-.logout{background:#d6a15d;color:#3d281b}
-.container{max-width:1200px;margin:30px auto;padding:0 20px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px;margin-bottom:25px}
-.stat,.panel{background:white;border-radius:12px;padding:22px;box-shadow:0 3px 14px #00000010}
-.stat p{color:#927b65;margin-bottom:10px}
-.stat h2{font-size:27px;color:#805332}
-.panel{margin-bottom:25px}
-.panel h2{margin-bottom:20px}
-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
-label{display:block;font-weight:bold;font-size:13px;margin-bottom:7px}
-input,select{width:100%;padding:12px;border:1px solid #d9c7b3;border-radius:7px;background:white}
-.form-actions{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
-.primary{background:#68432c;color:white}
-.secondary{background:#ead5b8;color:#4b2e1e}
-.danger{background:#a33a2d;color:white}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:700px}
-th,td{text-align:left;padding:13px;border-bottom:1px solid #eee}
-th{background:#f4e8d8;color:#563a28}
-td button{margin:3px}
-.status{font-size:13px;color:#806b58}
-#message{margin:12px 0;overflow-wrap:anywhere}
-.image-section{grid-column:1/-1}
-.image-options{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.image-options label{margin:0}
-.upload-btn{display:inline-block;background:#ead5b8;color:#4b2e1e;padding:12px 16px;border-radius:7px;cursor:pointer;font-weight:bold}
-.camera-btn{display:inline-block;background:#68432c;color:white;padding:12px 16px;border-radius:7px;cursor:pointer;font-weight:bold}
-#imagePreview{display:none;width:150px;height:150px;object-fit:cover;border-radius:10px;border:2px solid #d9c7b3;margin-top:15px}
-#imageStatus{font-size:13px;color:#806b58;margin-top:8px}
-.product-thumb{width:45px;height:45px;object-fit:cover;border-radius:6px}
-@media(max-width:600px){
-header{padding:17px}
-.container{padding:0 12px}
-.panel{padding:15px}
+:root {
+    --maroon: #64152D;
+    --dark: #400C1D;
+    --burgundy: #8B1E3F;
+    --gold: #D4AF70;
+    --gold-light: #F1DDB5;
+    --cream: #FFF8F2;
+    --white: #FFFFFF;
+    --text: #39232A;
+    --muted: #806D70;
+    --border: #EBDCE0;
+    --danger: #B83242;
+    --success: #277344;
 }
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: var(--cream);
+    color: var(--text);
+}
+
+/* HEADER */
+
+header {
+    background: var(--dark);
+    color: white;
+    padding: 19px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 18px #0002;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    width: 46px;
+    height: 46px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+header h2 {
+    font-size: 21px;
+    letter-spacing: 1px;
+}
+
+header p {
+    color: var(--gold-light);
+    font-size: 11px;
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 7px;
+    padding: 11px 16px;
+    font-weight: 700;
+    font-size: 13px;
+    transition: .25s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.logout {
+    background: var(--gold);
+    color: var(--dark);
+    padding: 12px 22px;
+}
+
+/* MAIN CONTAINER */
+
+.container {
+    max-width: 1250px;
+    margin: 32px auto;
+    padding: 0 22px;
+}
+
+.page-heading {
+    margin-bottom: 25px;
+}
+
+.page-heading h1 {
+    color: var(--maroon);
+    font-size: 28px;
+    margin-bottom: 7px;
+}
+
+.page-heading p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* STATISTICS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 19px;
+    margin-bottom: 27px;
+}
+
+.stat {
+    background: white;
+    border-radius: 12px;
+    padding: 23px;
+    box-shadow: 0 4px 18px #64152D0D;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--gold);
+    transition: .25s;
+}
+
+.stat:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px #64152D18;
+}
+
+.stat p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.stat h2 {
+    font-size: 32px;
+    color: var(--maroon);
+}
+
+.stat-icon {
+    font-size: 23px;
+    margin-bottom: 10px;
+}
+
+/* PANELS */
+
+.panel {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 18px #64152D0D;
+    border: 1px solid var(--border);
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 23px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-heading h2 {
+    color: var(--maroon);
+    font-size: 20px;
+}
+
+/* FORM */
+
+form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 17px;
+}
+
+label {
+    display: block;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: var(--maroon);
+}
+
+input, select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #E3CFD4;
+    border-radius: 7px;
+    background: #FFFCFA;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: .2s;
+}
+
+input:focus, select:focus {
+    border-color: var(--maroon);
+    box-shadow: 0 0 0 3px #64152D12;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    align-items: end;
+    flex-wrap: wrap;
+}
+
+.primary {
+    background: var(--maroon);
+    color: white;
+}
+
+.primary:hover {
+    background: var(--burgundy);
+}
+
+.secondary {
+    background: var(--gold-light);
+    color: var(--dark);
+}
+
+.danger {
+    background: var(--danger);
+    color: white;
+}
+
+/* IMAGE UPLOAD */
+
+.image-section {
+    grid-column: 1 / -1;
+    background: #FFFAF7;
+    padding: 19px;
+    border: 1px dashed #D7B7C1;
+    border-radius: 10px;
+}
+
+.image-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 13px;
+}
+
+.image-options label {
+    margin: 0;
+}
+
+.upload-btn {
+    display: inline-block;
+    background: var(--gold-light);
+    color: var(--dark);
+    padding: 12px 17px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.camera-btn {
+    display: inline-block;
+    background: var(--maroon);
+    color: white;
+    padding: 12px 17px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.upload-btn:hover,
+.camera-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+#imagePreview {
+    display: none;
+    width: 145px;
+    height: 145px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 3px solid var(--gold);
+    margin-top: 16px;
+}
+
+#imageStatus {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 9px;
+}
+
+.status {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+#message {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+/* TABLE */
+
+.table-wrap {
+    overflow-x: auto;
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+th, td {
+    text-align: left;
+    padding: 14px;
+    border-bottom: 1px solid #F0E6E8;
+    font-size: 13px;
+}
+
+th {
+    background: var(--maroon);
+    color: white;
+    font-size: 12px;
+    letter-spacing: .4px;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background: #FFF7F5;
+}
+
+td button {
+    margin: 3px;
+    padding: 9px 12px;
+}
+
+.product-thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+}
+
+.stock-badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: #F1E3C9;
+    color: #73501D;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.active-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #E4F3E9;
+    color: var(--success);
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.hidden-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #F9E3E5;
+    color: var(--danger);
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* FOOTER */
+
+.dashboard-footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.dashboard-footer strong {
+    color: var(--maroon);
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 650px) {
+    header {
+        padding: 16px;
+    }
+
+    header h2 {
+        font-size: 17px;
+    }
+
+    .container {
+        padding: 0 12px;
+        margin-top: 22px;
+    }
+
+    .panel {
+        padding: 16px;
+    }
+
+    .page-heading h1 {
+        font-size: 24px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 11px;
+    }
+
+    .stat {
+        padding: 16px;
+    }
+
+    .stat h2 {
+        font-size: 26px;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions button {
+        flex: 1;
+    }
+
+    .image-options {
+        flex-direction: column;
+    }
+
+    .upload-btn,
+    .camera-btn {
+        text-align: center;
+    }
+}
+
+.brand-logo {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: white;
+    padding: 3px;
+    border: 2px solid #D4AF70;
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-    <h2>🛒 AS GROCERY SHOP | ADMIN</h2>
-    <button class="logout" id="logoutBtn">Logout</button>
+    <div class="brand">
+        <div class="brand-icon">
+            <img src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png" alt="AS Grocery Shop" class="brand-logo">
+        </div>
+        <div>
+            <h2>AS GROCERY SHOP</h2>
+            <p>ADMINISTRATION PANEL</p>
+        </div>
+    </div>
+
+    <button class="logout" id="logoutBtn">↪ Logout</button>
 </header>
 
 <div class="container">
 
+    <div class="page-heading">
+        <h1>Dashboard Overview</h1>
+        <p>Welcome to your AS Grocery Shop management dashboard.</p>
+    </div>
+
+    <!-- STATISTICS -->
+
     <div class="stats">
+
         <div class="stat">
+            <div class="stat-icon">📦</div>
             <p>Total Products</p>
             <h2 id="totalProducts">0</h2>
         </div>
 
         <div class="stat">
+            <div class="stat-icon">✅</div>
             <p>Active Products</p>
             <h2 id="activeProducts">0</h2>
         </div>
 
         <div class="stat">
+            <div class="stat-icon">⚠️</div>
             <p>Low Stock (5 or less)</p>
             <h2 id="lowStock">0</h2>
         </div>
+
     </div>
+
+    <!-- ADD PRODUCT -->
 
     <div class="panel">
 
-        <h2 id="formTitle">Add New Product</h2>
+        <div class="panel-heading">
+            <h2 id="formTitle">＋ Add New Product</h2>
+        </div>
 
         <form id="productForm">
 
             <input type="hidden" id="productId">
 
             <div>
-                <label for="name">Product Name</label>
+                <label for="name">Product Name *</label>
                 <input id="name" required placeholder="e.g. Tomato">
             </div>
 
             <div>
-                <label for="price">Price (₹)</label>
+                <label for="price">Price (₹) *</label>
                 <input id="price" type="number" min="0" step="0.01" required placeholder="30">
             </div>
 
             <div>
-                <label for="category">Category</label>
+                <label for="category">Category *</label>
                 <select id="category" required>
                     <option value="Vegetables">Vegetables</option>
                     <option value="Fruits">Fruits</option>
@@ -109,18 +573,18 @@ header{padding:17px}
             </div>
 
             <div>
-                <label for="stock">Stock Quantity</label>
+                <label for="stock">Stock Quantity *</label>
                 <input id="stock" type="number" min="0" step="1" required placeholder="20">
             </div>
 
-            <!-- PRODUCT IMAGE UPLOAD -->
+            <!-- IMAGE UPLOAD -->
 
             <div class="image-section">
 
                 <label>Product Image</label>
 
                 <p class="status">
-                    Choose an image from your computer or take a photo using your camera.
+                    Upload an image from your computer or take a photo using your camera.
                 </p>
 
                 <div class="image-options">
@@ -156,26 +620,24 @@ header{padding:17px}
 
                 <img id="imagePreview" alt="Product image preview">
 
-                <p id="imageStatus">
-                    No new image selected.
-                </p>
+                <p id="imageStatus">No new image selected.</p>
 
-                <div style="margin-top:15px">
-                    <label for="image">Or enter an Image URL (optional)</label>
+                <div style="margin-top:16px">
+                    <label for="image">Or Enter Image URL (Optional)</label>
                     <input id="image" type="url" placeholder="https://example.com/image.jpg">
                 </div>
 
             </div>
 
             <div>
-                <label for="description">Description</label>
+                <label for="description">Product Description</label>
                 <input id="description" placeholder="Fresh quality product">
             </div>
 
             <div class="form-actions">
 
                 <button type="submit" class="primary" id="saveBtn">
-                    Add Product
+                    ＋ Add Product
                 </button>
 
                 <button type="button" class="secondary" id="cancelBtn" hidden>
@@ -190,11 +652,14 @@ header{padding:17px}
 
     </div>
 
+    <!-- MANAGE PRODUCTS -->
+
     <div class="panel">
 
-        <h2>Manage Products</h2>
-
-        <p class="status" id="loadStatus">Checking connection...</p>
+        <div class="panel-heading">
+            <h2>📦 Manage Products</h2>
+            <p class="status" id="loadStatus">Checking connection...</p>
+        </div>
 
         <div class="table-wrap">
 
@@ -221,7 +686,10 @@ header{padding:17px}
 
     </div>
 
-    <p class="status">Products and images are saved in Supabase.</p>
+    <div class="dashboard-footer">
+        <p>© 2026 <strong>AS GROCERY SHOP</strong>. All Rights Reserved.</p>
+        <p>Freshness & Quality You Can Trust ❤️</p>
+    </div>
 
 </div>
 
@@ -295,7 +763,7 @@ function showMessage(message, isError = false) {
     el("message").textContent = message;
 
     el("message").style.color =
-        isError ? "#a33a2d" : "#277344";
+        isError ? "#B83242" : "#277344";
 }
 
 
@@ -312,8 +780,6 @@ function handleImageSelection(file) {
         return;
     }
 
-    // Maximum image size: 5 MB
-
     if (file.size > 5 * 1024 * 1024) {
         showMessage("Image must be smaller than 5 MB.", true);
         return;
@@ -329,29 +795,21 @@ function handleImageSelection(file) {
     el("imageStatus").textContent =
         "Selected: " + file.name;
 
-    // Clear URL field because uploaded image takes priority
-
     el("image").value = "";
 
     showMessage("Image selected successfully.");
 }
 
-
 el("imageFile").addEventListener("change", function() {
 
     handleImageSelection(this.files[0]);
-
-    // Allows selecting the same file again later
-
     this.value = "";
 
 });
 
-
 el("cameraFile").addEventListener("change", function() {
 
     handleImageSelection(this.files[0]);
-
     this.value = "";
 
 });
@@ -402,9 +860,7 @@ async function uploadProductImage(file) {
             upsert: false
         });
 
-    if (error) {
-        throw error;
-    }
+    if (error) throw error;
 
     const { data: publicData } = db.storage
         .from(BUCKET_NAME)
@@ -498,15 +954,25 @@ function renderProducts() {
 
             <td>${escapeHTML(p.id)}</td>
 
-            <td>${escapeHTML(p.name)}</td>
+            <td><strong>${escapeHTML(p.name)}</strong></td>
 
             <td>₹${Number(p.price).toFixed(2)}</td>
 
             <td>${escapeHTML(p.category)}</td>
 
-            <td>${escapeHTML(p.stock)}</td>
+            <td>
+                <span class="stock-badge">
+                    ${escapeHTML(p.stock)}
+                </span>
+            </td>
 
-            <td>${p.is_active ? "Active" : "Hidden"}</td>
+            <td>
+                ${
+                    p.is_active
+                    ? '<span class="active-badge">Active</span>'
+                    : '<span class="hidden-badge">Hidden</span>'
+                }
+            </td>
 
             <td>
 
@@ -575,8 +1041,6 @@ el("productForm").addEventListener("submit", async function(e) {
 
     try {
 
-        // Upload selected image first
-
         if (selectedImageFile) {
 
             showMessage("Uploading product image...");
@@ -605,9 +1069,7 @@ el("productForm").addEventListener("submit", async function(e) {
 
         }
 
-        if (result.error) {
-            throw result.error;
-        }
+        if (result.error) throw result.error;
 
         if (!result.data || result.data.length === 0) {
             throw new Error(
@@ -639,7 +1101,7 @@ el("productForm").addEventListener("submit", async function(e) {
         el("saveBtn").disabled = false;
 
         el("saveBtn").textContent =
-            el("productId").value ? "Update Product" : "Add Product";
+            el("productId").value ? "Update Product" : "＋ Add Product";
 
     }
 
@@ -661,17 +1123,11 @@ function editProduct(id) {
     resetImageSelection();
 
     el("productId").value = p.id;
-
     el("name").value = p.name;
-
     el("price").value = p.price;
-
     el("category").value = p.category;
-
     el("stock").value = p.stock;
-
     el("image").value = p.image_url || "";
-
     el("description").value = p.description || "";
 
     currentImageURL = p.image_url || "";
@@ -679,7 +1135,6 @@ function editProduct(id) {
     if (currentImageURL) {
 
         el("imagePreview").src = currentImageURL;
-
         el("imagePreview").style.display = "block";
 
         el("imageStatus").textContent =
@@ -687,7 +1142,7 @@ function editProduct(id) {
 
     }
 
-    el("formTitle").textContent = "Edit Product";
+    el("formTitle").textContent = "✎ Edit Product";
 
     el("saveBtn").textContent = "Update Product";
 
@@ -737,18 +1192,15 @@ async function deleteProduct(id) {
 function resetImageSelection() {
 
     selectedImageFile = null;
-
     currentImageURL = "";
 
     el("imagePreview").removeAttribute("src");
-
     el("imagePreview").style.display = "none";
 
     el("imageStatus").textContent =
         "No new image selected.";
 
     el("imageFile").value = "";
-
     el("cameraFile").value = "";
 
 }
@@ -764,16 +1216,15 @@ function resetForm() {
 
     el("productId").value = "";
 
-    el("formTitle").textContent = "Add New Product";
+    el("formTitle").textContent = "＋ Add New Product";
 
-    el("saveBtn").textContent = "Add Product";
+    el("saveBtn").textContent = "＋ Add Product";
 
     el("cancelBtn").hidden = true;
 
     resetImageSelection();
 
 }
-
 
 el("cancelBtn").addEventListener("click", resetForm);
 

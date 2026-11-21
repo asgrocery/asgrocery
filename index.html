@@ -6,30 +6,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>AS GROCERY SHOP | Freshness & Quality</title>
-
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
+:root {
+    --maroon: #64152D;
+    --maroon-dark: #400C1D;
+    --burgundy: #8B1E3F;
+    --gold: #D4AF70;
+    --gold-light: #F1DDB5;
+    --cream: #FFF8F2;
+    --white: #FFFFFF;
+    --text: #39232A;
+    --muted: #806D70;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: #faf6ef;
-    color: #3d281b;
+html {
+    scroll-behavior: smooth;
 }
 
-/* Navigation */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+}
+
+/* HEADER */
+
 header {
-    background: #4b2e1e;
+    background: var(--maroon-dark);
     color: white;
-    padding: 18px 7%;
+    padding: 16px 7%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
     flex-wrap: wrap;
-    gap: 15px;
+    box-shadow: 0 4px 18px #0002;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .brand {
@@ -39,252 +63,498 @@ header {
 }
 
 .brand img {
-    width: 55px;
-    height: 55px;
+    width: 53px;
+    height: 53px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid var(--gold);
 }
 
 .brand h2 {
-    font-size: 23px;
-    letter-spacing: 1px;
+    font-size: 22px;
+    letter-spacing: 1.2px;
+    color: white;
 }
 
 nav {
     display: flex;
-    gap: 25px;
     align-items: center;
+    gap: 28px;
 }
 
 nav a {
     text-decoration: none;
-    color: white;
+    color: #F9EDEB;
+    font-size: 15px;
     font-weight: 600;
     transition: 0.3s;
 }
 
 nav a:hover {
-    color: #f2c078;
+    color: var(--gold);
 }
 
 .admin-btn {
-    background: #d6a15d;
-    color: #382316;
+    background: var(--gold);
+    color: var(--maroon-dark);
     padding: 11px 20px;
-    border-radius: 7px;
+    border-radius: 6px;
 }
 
-/* Hero Section */
+.admin-btn:hover {
+    background: white;
+    color: var(--maroon);
+}
+
+/* HERO SECTION */
+
 .hero {
-    min-height: 600px;
-    padding: 65px 7%;
+    min-height: 590px;
+    padding: 75px 8%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 40px;
-    background: linear-gradient(120deg, #f4e8d5, #fffaf2);
+    justify-content: space-between;
+    gap: 50px;
+
+    background-image:
+        linear-gradient(
+            rgba(255, 248, 242, 0.65),
+            rgba(255, 248, 242, 0.65)
+        ),
+        url("assets\background image.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .hero-content {
-    max-width: 600px;
+    max-width: 610px;
 }
 
 .tagline {
     display: inline-block;
-    background: #ead5b8;
-    color: #704524;
-    padding: 9px 17px;
+    background: #F0DFE3;
+    color: var(--maroon);
+    padding: 10px 19px;
     border-radius: 30px;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    margin-bottom: 23px;
 }
 
 .hero h1 {
-    font-size: clamp(38px, 5vw, 60px);
-    color: #4b2e1e;
+    font-size: clamp(40px, 5vw, 64px);
     line-height: 1.15;
-    margin-bottom: 20px;
+    color: var(--maroon-dark);
+    margin-bottom: 22px;
+    font-weight: 800;
 }
 
 .hero h1 span {
-    color: #a66b32;
+    color: var(--burgundy);
 }
 
 .hero p {
-    font-size: 18px;
-    line-height: 1.8;
-    color: #725c49;
-    margin-bottom: 30px;
+    font-size: 17px;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 32px;
 }
 
 .hero-buttons {
     display: flex;
-    flex-wrap: wrap;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .btn {
+    display: inline-block;
     text-decoration: none;
     padding: 15px 25px;
     border-radius: 7px;
-    font-weight: bold;
-    display: inline-block;
+    font-size: 15px;
+    font-weight: 700;
     transition: 0.3s;
 }
 
 .primary {
-    background: #6b4025;
+    background: var(--maroon);
     color: white;
+    box-shadow: 0 5px 15px #64152D30;
+}
+
+.primary:hover {
+    background: var(--burgundy);
+    transform: translateY(-3px);
 }
 
 .secondary {
-    background: #d6a15d;
-    color: #3d281b;
+    background: var(--gold);
+    color: var(--maroon-dark);
 }
 
-.btn:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 15px #0002;
+.secondary:hover {
+    background: var(--gold-light);
+    transform: translateY(-3px);
 }
 
 .hero-logo {
+    flex: 1;
     display: flex;
     justify-content: center;
-    flex: 1;
+    align-items: center;
 }
 
 .hero-logo img {
     width: min(390px, 100%);
     border-radius: 50%;
-    filter: drop-shadow(0 12px 15px #0002);
+    border: 8px solid white;
+    box-shadow: 0 15px 45px #64152D20;
 }
 
-/* Features */
+/* FEATURES */
+
 .features {
-    padding: 65px 7%;
+    padding: 80px 7%;
     text-align: center;
+    background: white;
 }
 
 .section-title {
-    font-size: 34px;
-    color: #4b2e1e;
+    font-size: 36px;
+    color: var(--maroon);
     margin-bottom: 12px;
+    font-weight: 800;
 }
 
 .section-subtitle {
-    color: #806b58;
-    margin-bottom: 40px;
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 45px;
 }
 
 .feature-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 25px;
 }
 
 .feature-card {
-    background: white;
-    padding: 30px 20px;
+    background: var(--cream);
+    padding: 35px 22px;
     border-radius: 12px;
-    box-shadow: 0 5px 20px #55351a12;
-    border-bottom: 4px solid #c18a4d;
+    border: 1px solid #EBDCE0;
+    border-bottom: 4px solid var(--gold);
+    box-shadow: 0 7px 22px #64152D0A;
     transition: 0.3s;
 }
 
 .feature-card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-7px);
+    box-shadow: 0 12px 28px #64152D18;
+    border-bottom-color: var(--maroon);
 }
 
 .feature-card .icon {
-    font-size: 42px;
-    margin-bottom: 15px;
+    width: 85px;
+    height: 85px;
+    background: #F0DFE3;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    overflow: hidden;
+    border: 2px solid var(--gold);
 }
 
-.feature-card h3 {
-    color: #6b4025;
-    margin-bottom: 10px;
+.feature-card .icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+    padding: 0;
 }
 
-.feature-card p {
-    color: #806b58;
-    line-height: 1.6;
-}
+/* CONTACT */
 
-/* Contact */
 .contact {
-    background: #4b2e1e;
+    background: linear-gradient(120deg, var(--maroon-dark), var(--maroon));
     color: white;
     text-align: center;
-    padding: 65px 20px;
+    padding: 75px 20px;
+    position: relative;
 }
 
 .contact h2 {
-    font-size: 34px;
-    margin-bottom: 15px;
+    font-size: 36px;
+    margin-bottom: 18px;
 }
 
 .contact p {
-    color: #ead5b8;
-    margin-bottom: 25px;
-    line-height: 1.7;
+    color: #F0DDE2;
+    font-size: 16px;
+    line-height: 1.9;
+    margin-bottom: 30px;
 }
 
 .whatsapp {
-    background: #d6a15d;
-    color: #382316;
+    background: var(--gold);
+    color: var(--maroon-dark);
 }
 
-/* Footer */
+.whatsapp:hover {
+    background: white;
+    transform: translateY(-3px);
+}
+
+/* FOOTER */
+
 footer {
-    background: #2e1c13;
-    color: #ddc5a9;
-    padding: 23px;
+    background: #280914;
+    color: #EBD7DB;
+    padding: 28px 15px;
     text-align: center;
     font-size: 14px;
+    line-height: 1.8;
 }
 
-/* Mobile */
+footer strong {
+    color: var(--gold);
+}
+
+/* RESPONSIVE DESIGN */
+
 @media(max-width: 768px) {
+
     header {
         justify-content: center;
         text-align: center;
+        padding: 15px 5%;
+    }
+
+    .brand {
+        justify-content: center;
+    }
+
+    .brand h2 {
+        font-size: 19px;
     }
 
     nav {
         justify-content: center;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 16px;
+    }
+
+    nav a {
+        font-size: 14px;
     }
 
     .hero {
         flex-direction: column-reverse;
         text-align: center;
-        padding: 45px 6%;
+        padding: 50px 6%;
+        gap: 35px;
     }
 
     .hero-logo img {
-        width: 240px;
+        width: 235px;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .hero p {
+        font-size: 15px;
     }
 
     .hero-buttons {
         justify-content: center;
     }
 
-    .hero h1 {
-        font-size: 39px;
+    .features {
+        padding: 60px 6%;
+    }
+
+    .section-title,
+    .contact h2 {
+        font-size: 29px;
     }
 }
+
+@media(max-width: 400px) {
+    .brand h2 {
+        font-size: 16px;
+    }
+
+    nav {
+        gap: 12px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+}
+
+/* Professional WhatsApp Chat Button */
+.whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 13px;
+    padding: 13px 22px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 7px 20px rgba(18, 140, 126, 0.25);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.whatsapp-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(18, 140, 126, 0.35);
+    background: linear-gradient(135deg, #20C76A, #087E70);
+}
+
+.whatsapp-icon {
+    width: 43px;
+    height: 43px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+}
+
+.whatsapp-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 3px;
+}
+
+.whatsapp-text strong {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.whatsapp-text small {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+.chat-arrow {
+    font-size: 24px;
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-btn:hover .chat-arrow {
+    transform: translateX(5px);
+}
+
+/* Professional Hero Buttons */
+.hero-buttons {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.primary-btn,
+.secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 54px;
+    padding: 0 27px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+
+/* Explore Products */
+.primary-btn {
+    color: #fff;
+    background: linear-gradient(135deg, #64152D, #8B1E3F);
+    border: 2px solid #64152D;
+    box-shadow: 0 7px 18px rgba(100, 21, 45, 0.22);
+}
+
+.primary-btn:hover {
+    background: linear-gradient(135deg, #400C1D, #64152D);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(100, 21, 45, 0.3);
+}
+
+.primary-btn i {
+    transition: transform 0.3s ease;
+}
+
+.primary-btn:hover i {
+    transform: translateX(5px);
+}
+
+/* Contact Us */
+.secondary-btn {
+    color: #64152D;
+    background: #FFF8F2;
+    border: 2px solid #D4AF70;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+.secondary-btn:hover {
+    color: #fff;
+    background: #64152D;
+    border-color: #64152D;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(100, 21, 45, 0.2);
+}
+
+.secondary-btn i {
+    font-size: 17px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .hero-buttons {
+        gap: 12px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        min-height: 49px;
+        padding: 0 19px;
+        font-size: 13px;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- Navigation -->
+<!-- HEADER -->
+
 <header>
+
     <div class="brand">
-        <img src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
-             alt="AS Grocery Logo">
+        <img
+            src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
+            alt="AS Grocery Logo">
+
         <h2>AS GROCERY SHOP</h2>
     </div>
 
@@ -294,15 +564,17 @@ footer {
         <a href="#contact">Contact</a>
         <a href="admin.html" class="admin-btn">Admin Login</a>
     </nav>
+
 </header>
 
-<!-- Hero -->
+<!-- HERO -->
+
 <section class="hero">
 
     <div class="hero-content">
 
         <span class="tagline">
-            🥬 YOUR TRUSTED GROCERY STORE
+             YOUR TRUSTED GROCERY STORE
         </span>
 
         <h1>
@@ -318,28 +590,32 @@ footer {
 
         <div class="hero-buttons">
 
-            <a href="shop.html" class="btn primary">
-                🛒 Explore Products →
-            </a>
+    <a href="shop.html" class="primary-btn">
+        <span>Explore Products</span>
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
 
-            <a href="https://wa.me/918682880430"
-               target="_blank"
-               rel="noopener"
-               class="btn secondary">
-                Contact Us
-            </a>
+    <a href="#contact" class="secondary-btn">
+        <i class="fa-regular fa-envelope"></i>
+        <span>Contact Us</span>
+    </a>
 
-        </div>
+</div>
+
     </div>
 
     <div class="hero-logo">
-        <img src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
-             alt="AS Grocery Shop">
+
+        <img
+            src="assets/Freshness%20%26%20Quality%20Grocery%20Badge%20(1).png"
+            alt="AS Grocery Shop">
+
     </div>
 
 </section>
 
-<!-- Features -->
+<!-- FEATURES -->
+
 <section class="features">
 
     <h2 class="section-title">Why Choose Us?</h2>
@@ -350,34 +626,44 @@ footer {
 
     <div class="feature-grid">
 
-        <div class="feature-card">
-            <div class="icon">🥬</div>
-            <h3>Best Products</h3>
-            <p>Fresh grocery essentials for your everyday needs.</p>
-        </div>
+       <div class="feature-card">
+    <div class="icon">
+        <img src="assets\images (1).jpg" alt="Best Products">
+    </div>
+    <h3>Best Products</h3>
+    <p>Fresh grocery essentials for your everyday needs.</p>
+</div>
 
-        <div class="feature-card">
-            <div class="icon">💰</div>
-            <h3>Best Prices</h3>
-            <p>Shop your daily essentials at affordable prices.</p>
-        </div>
+<div class="feature-card">
+    <div class="icon">
+        <img src="assets\images(2).jpg" alt="Best Prices">
+    </div>
+    <h3>Best Prices</h3>
+    <p>Shop your daily essentials at affordable prices.</p>
+</div>
 
-        <div class="feature-card">
-            <div class="icon">⭐</div>
-            <h3>Best Quality</h3>
-            <p>Quality products and customer satisfaction matter to us.</p>
-        </div>
+<div class="feature-card">
+    <div class="icon">
+        <img src="assets\images(3).jpg" alt="Best Quality">
+    </div>
+    <h3>Best Quality</h3>
+    <p>Quality products and customer satisfaction matter to us.</p>
+</div>
 
-        <div class="feature-card">
-            <div class="icon">🛒</div>
-            <h3>Easy Shopping</h3>
-            <p>Explore our grocery products with ease.</p>
-        </div>
+<div class="feature-card">
+    <div class="icon">
+        <img src="assets\images(4).png" alt="Easy Shopping">
+    </div>
+    <h3>Easy Shopping</h3>
+    <p>Explore our grocery products with ease.</p>
+</div>
 
     </div>
+
 </section>
 
-<!-- Contact -->
+<!-- CONTACT -->
+
 <section class="contact" id="contact">
 
     <h2>Join AS Grocery Shop!</h2>
@@ -388,20 +674,37 @@ footer {
     </p>
 
     <a href="https://wa.me/918682880430"
-       target="_blank"
-       rel="noopener"
-       class="btn whatsapp">
-        💬 Chat With Us on WhatsApp
-    </a>
+   class="whatsapp-btn"
+   target="_blank"
+   rel="noopener noreferrer">
+
+    <span class="whatsapp-icon">
+        <i class="fa-brands fa-whatsapp"></i>
+    </span>
+
+    <span class="whatsapp-text">
+        <strong>Chat With Us</strong>
+        <small>We're here to help you!</small>
+    </span>
+
+    <span class="chat-arrow">→</span>
+</a>
 
 </section>
 
-<!-- Footer -->
+<!-- FOOTER -->
+
 <footer>
-    <p>© 2026 AS GROCERY SHOP. All Rights Reserved.</p>
-    <p style="margin-top:8px;">
+
+    <p>
+        © 2026 <strong>AS GROCERY SHOP</strong>.
+        All Rights Reserved.
+    </p>
+
+    <p>
         Freshness & Quality You Can Trust ❤️
     </p>
+
 </footer>
 
 </body>
